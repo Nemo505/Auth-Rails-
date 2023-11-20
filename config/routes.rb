@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-
-  # get "up" => "rails/health#show", as: :rails_health_check
-  get "employee", to:"employee#index"
-  get "register", to:"auth#register"
+  # get "register", to:"auth#register"
+  resource :registration
+  resource :session
+  
+  root "employee#index"
 end

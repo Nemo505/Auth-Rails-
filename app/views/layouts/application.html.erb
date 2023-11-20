@@ -13,7 +13,20 @@
 
   <body>
     <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
+      <%= yield  %>
+      <% if user_signed_in? %>
+        <!-- Display content for signed-in users -->
+        <%= current_user.username %>!
+        <%= button_to "Log out", registration_path, method: :delete %>!
+        
+      <% else %>
+        <!-- Display content for non-signed-in users -->
+        
+        
+        <%# <%= link_to "Register", new_registeration_path %>
+        <%= link_to "Log in", new_session_path %>!
+      <% end %>
+
     </main>
   </body>
 </html>
