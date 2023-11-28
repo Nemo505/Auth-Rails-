@@ -13,5 +13,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    logout @user # Assuming you're using Devise
+    redirect_to root_path, notice: 'Logged out successfully!'
   end
 end

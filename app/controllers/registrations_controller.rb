@@ -20,6 +20,6 @@ class RegistrationsController < ApplicationController
 
     def registration_params
         #params = requested data, .require = check if :user exist, .permist = allow attribute of user to assign
-        params.require(:user).permist(:email, :password, :password_confirmation)
+        params.require(:user).permit(:user_name, :email, :password, :password_confirmation)
     end
 end
