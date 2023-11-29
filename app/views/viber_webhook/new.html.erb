@@ -1,0 +1,88 @@
+
+  <div class="bg-white rounded-lg overflow-hidden shadow-md w-100">
+    <div class=" overflow-y-auto" id="chat-messages" style="height: 75vh;">
+      <div class="flex items-center text-left text-gray-700">
+        <div class="rounded-full overflow-hidden h-8 w-8">
+          <img src="https://th.bing.com/th/id/R.3b08c63aa668ff1acf525bf572a77d93?rik=RUMq%2bjgYgkNndA&pid=ImgRaw&r=0" alt="User Icon" class="w-full h-full object-cover">
+        </div>
+        <div class="ml-2">Hello! How can I help you today?</div>
+      </div>
+
+
+
+    </div>
+
+    <div class="flex p-4 bg-gray-200">
+      <input type="text" id="message-input" placeholder="Type your message..." class="flex-1 py-2 px-4 border rounded-l-lg">
+      <button onclick="sendMessage()" class="bg-gray-700 text-white py-2 px-4 rounded-r-lg">Send</button>
+    </div>
+  </div>
+
+
+
+<script>
+  function sendMessage() {
+    var userInput = document.getElementById('message-input').value;
+    var chatMessages = document.getElementById('chat-messages');
+
+    // Clear the input field
+    document.getElementById('message-input').value = '';
+
+    // Send user message to the server
+    fetch('/viber_webhook/receive', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: userInput }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Display user message with rounded image profile
+      displayMessage(userInput, 'text-end');
+
+      // Display bot response with rounded image profile
+      displayMessage(data.bot_response, 'text-left');
+      
+      // Scroll to the bottom of the chat
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    })
+    .catch(error => console.error('Error:', error));
+
+
+    function displayMessage(messageText, alignment) {
+      var chatMessages = document.getElementById('chat-messages');
+
+      // Create a message container
+      var messageContainer = document.createElement('div');
+      messageContainer.className = 'flex items-center ' + alignment + ' text-gray-700 mb-2';
+
+      // Add a rounded image profile
+      var profileImage = document.createElement('div');
+      profileImage.className = 'rounded-full overflow-hidden h-8 w-8';
+      var imageElement = document.createElement('img');
+      imageElement.src = 'https://th.bing.com/th/id/R.3b08c63aa668ff1acf525bf572a77d93?rik=RUMq%2bjgYgkNndA&pid=ImgRaw&r=0';
+      imageElement.alt = 'User Icon';
+      imageElement.className = 'w-full h-full object-cover';
+      profileImage.appendChild(imageElement);
+
+      // Add message text to the container
+      var messageTextElement = document.createElement('div');
+      messageTextElement.className = 'ml-2';
+      messageTextElement.textContent = messageText;
+
+      // Append image and text to the message container
+      messageContainer.appendChild(profileImage);
+      messageContainer.appendChild(messageTextElement);
+
+      // Append the message container to the chat
+      chatMessages.appendChild(messageContainer);
+    }
+  }
+</script>
+
+
+
+
+
+
