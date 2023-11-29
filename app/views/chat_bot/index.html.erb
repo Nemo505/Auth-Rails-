@@ -1,14 +1,22 @@
 
   <div class="bg-white rounded-lg overflow-hidden shadow-md w-100">
-    <div class=" bg-yellow-700 text-white py-2 px-4" id="chat-header">ChatBot</div>
-    <div class="p-4 h-48 overflow-y-auto" id="chat-messages">
-      <div class="text-left text-gray-700">Hello! How can I help you today?</div>
+  
+    <div class=" overflow-y-auto" id="chat-messages" style="height: 75vh;">
+      <div class="flex items-center text-left text-gray-700">
+        <div class="rounded-full overflow-hidden h-8 w-8">
+          <img src="https://th.bing.com/th/id/R.3b08c63aa668ff1acf525bf572a77d93?rik=RUMq%2bjgYgkNndA&pid=ImgRaw&r=0" alt="User Icon" class="w-full h-full object-cover">
+        </div>
+        <div class="ml-2">Hello! How can I help you today?</div>
+      </div>
+      <!-- Add more messages here with the same structure -->
     </div>
     <div class="flex p-4 bg-gray-200">
       <input type="text" id="message-input" placeholder="Type your message..." class="flex-1 py-2 px-4 border rounded-l-lg">
-      <button onclick="sendMessage()" class="bg-yellow-700 text-white py-2 px-4 rounded-r-lg">Send</button>
+      <button onclick="sendMessage()" class="bg-gray-700 text-white py-2 px-4 rounded-r-lg">Send</button>
     </div>
   </div>
+
+
 
 <script>
   function sendMessage() {

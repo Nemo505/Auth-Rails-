@@ -4,16 +4,22 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if user = User.authenticate_by(email: params[:email], password: params[:password])
+    user = User.find_by(email: params[:session][:email])
+
+    if user && user.authenticate(params[:session][:password])
+      # Log in the user and redirect to the desired location
       login user
-      redirect_to root_path, notice: "You have logged in successfully"
+      redirect_to root_url
     else
-      render :new, status: :unprocessable_entity
+      # Display an error message and render the login form again
+      flash.now[:danger] = 'Invalid email/password combination'
+      render 'new'
     end
   end
 
   def destroy
-    logout @user # Assuming you're using Devise
-    redirect_to root_path, notice: 'Logged out successfully!'
+    # Log out the user
+    logout
+    redirect_to root_url, notice: 'Logged out successfully!'
   end
 end

@@ -15,32 +15,26 @@
 
   <body>
     <% if user_signed_in? %>
-      <nav class="bg-gray-800 p-4">
+      <nav class="bg-gray-500 p-4">
         <div class="container mx-auto flex justify-between items-center">
           <!-- Brand/logo -->
           <div class="text-white">
             <%= link_to 'MyApp', root_path, class: "text-xl font-bold" %>
           </div>
 
-          <!-- Navigation links -->
-          <div class="space-x-4">
-            <%= link_to 'Home', root_path, class: "text-white" %>
-            <%= link_to 'Profile',root_path, class: "text-white" %>
-          </div>
-
           <!-- User information -->
           <div class="flex items-center text-white">
             <span class="mr-2"><%= current_user.user_name %></span>
-            <%= button_to "Log out", session_path, method: :destroy, class: "" %>
+            <%= button_to "Log out", sessions_path, method: :destroy, class: "" %>
           </div>
 
         </div>
       </nav>
-      <main class="container w-1/2 mx-auto mt-4">
+      <main class="container mx-auto mt-4">
         <%= yield  %>
       </main>
     <% else %>
-      <main class="container w-1/2 mx-auto">
+      <main class="container mx-auto">
         <%= yield  %>
       </main>
     <% end %>
