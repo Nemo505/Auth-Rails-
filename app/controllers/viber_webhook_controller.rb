@@ -1,8 +1,8 @@
+require 'openai'
 class ViberWebhookController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def new
-
   end
 
   def receive
@@ -18,14 +18,14 @@ class ViberWebhookController < ApplicationController
   private
 
   def send_message(user_message)
-    # Handle sending messages and receiving responses here
-    # You can use user_message to get the user's message
+    # Use your OpenAI API key here
+    openai_client = OpenAI::Client.new(api_key: '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' , default_engine: "ada")
 
-    # Simulate a response from the bot for testing
-    bot_response = "I received: #{user_message}"
+    
+    response = openai_client.completions(prompt: user_message, max_tokens: 30)
+     # Extract the generated text from the response
+    bot_response = response['choices'][0]['text']
 
     bot_response
   end
 end
-
-  
