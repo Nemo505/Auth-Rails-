@@ -12,9 +12,9 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
-  <body>
+  <body class="bg-gradient-to-r from-black to-white via-gray-500 text-gray-800">
     <% if user_signed_in? %>
-      <nav class="bg-gray-500 p-4">
+      <nav class="bg-gray-500 p-4 bg-opacity-50 backdrop-blur-md">
         <div class="container mx-auto flex justify-between items-center">
           <!-- Brand/logo -->
           <div class="text-white">
@@ -26,9 +26,9 @@
             <span class="mr-2"><%= current_user.user_name %></span>
             <%= button_to "Log out", sessions_path, method: :destroy, class: "" %>
           </div>
-
         </div>
       </nav>
+
       <main class="container mx-auto mt-4">
         <%= yield  %>
       </main>
@@ -38,6 +38,22 @@
       </main>
     <% end %>
 
+
+  <!-- Include snowfall.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Snowstorm/20131208/snowstorm-min.js" integrity="sha512-rMkLONrw50boYG/6Ku0E8VstfWMRn5D0dX3QZS26Mg0rspYq4EHxYOULuPbv9Be2HBbrrmN8dpPgYUeJ4bINCA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    // Customize the options based on your preference
+    snowStorm.flakesMaxActive = 100;
+    snowStorm.followMouse = false;
+    snowStorm.freezeOnBlur = true;
+    snowStorm.snowColor = '#ffffff';
+    snowStorm.snowCharacter = '&bull;';
+    snowStorm.vMaxX = 5;
+    snowStorm.vMaxY = 5;
+
+    // Start the snowstorm
+    snowStorm.start();
+  </script>
 
   </body>
 </html>

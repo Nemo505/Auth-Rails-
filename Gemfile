@@ -70,3 +70,5 @@ gem "tailwindcss-rails", "~> 2.0"
 
 gem 'openai'
 
+gem "ruby-openai"
+
