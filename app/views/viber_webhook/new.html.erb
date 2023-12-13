@@ -50,12 +50,100 @@
   <button onclick="sendMessage()" class="bg-gray-700 text-white py-2 px-4 rounded-r-lg">Send</button>
   <button onclick="sendImage()" class="bg-gray-700 text-white py-2 ml-2 px-4 rounded-lg">Generate</button>
   <button onclick="audioMessage()" class="bg-gray-700 text-white py-2 ml-2 px-4 rounded-lg">Speak</button>
+  <button onclick="sendEmbedding()" class="bg-gray-700 text-white py-2 ml-2 px-4 rounded-lg">Embedding</button>
+  <input type="file" id="fileInput" onchange="handleFileUpload()">
 </div>
 
-          <!-- Add an audio element for bot responses -->
-          <%# <audio id="botAudio" style="display: none"></audio>
-          <button onclick="playBotAudio()">Play Audio</button> %>
+<script>
+  function handleFileUpload() {
+    // Get the file input element
+    var fileInput = document.getElementById('fileInput');
+    var chatBody = document.querySelector('.chat-body');
+    var chatMessages = document.getElementById('chat-messages');
 
+    // Display user message
+    displayMessage(fileInput.files[0].name, 'right', 'https://bootdey.com/img/Content/avatar/avatar2.png', 'User', 'online');
+
+    // Check if files are selected
+    if (fileInput.files.length > 0) {
+        // Get the first selected file
+        var file = fileInput.files[0];
+
+        // Create a FormData object to append the file
+        var formData = new FormData();
+        formData.append('file', file);
+
+        // Use the Fetch API to send the file to the server
+        fetch('/viber_webhook/receive', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display the text output in the chat
+            displayMessage(data.processed_file, 'left', 'https://bootdey.com/img/Content/avatar/avatar1.png', 'Bot', 'online');
+            // Clear the input field
+            document.getElementById('fileInput').value = '';
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error);
+        });
+    } else {
+        console.warn('No files selected.');
+    }
+  }
+
+  // Function to display a message in the chat
+  function displayMessage(messageContent, alignment, userImage, userName, userStatus) {
+      var chatBody = document.querySelector('.chat-body');
+      var chatMessages = document.getElementById('chat-messages');
+
+      var chatBubble = document.createElement('div');
+      chatBubble.classList.add('answer', alignment);
+
+      var avatarDiv = document.createElement('div');
+      avatarDiv.classList.add('avatar');
+
+      var img = document.createElement('img');
+      img.src = userImage;
+      img.alt = userName;
+
+      var statusDiv = document.createElement('div');
+      statusDiv.classList.add('status', userStatus);
+
+      avatarDiv.appendChild(img);
+      avatarDiv.appendChild(statusDiv);
+
+      var nameDiv = document.createElement('div');
+      nameDiv.classList.add('name');
+      nameDiv.textContent = userName;
+
+      var contentDiv = document.createElement('div');
+      contentDiv.classList.add('content');
+
+      // Display the text content
+      var textDiv = document.createElement('div');
+      textDiv.classList.add('text');
+      textDiv.textContent = messageContent;
+      contentDiv.appendChild(textDiv);
+
+      var timeDiv = document.createElement('div');
+      timeDiv.classList.add('time');
+      timeDiv.textContent = 'Just now';
+
+      chatBubble.appendChild(avatarDiv);
+      chatBubble.appendChild(nameDiv);
+      chatBubble.appendChild(contentDiv);
+      chatBubble.appendChild(timeDiv);
+
+      chatBody.appendChild(chatBubble);
+
+      // Scroll to the bottom of the chat
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+</script>
+
+         
 <script>
 
   function playBotAudio() {
@@ -93,6 +181,77 @@
     .then(data => {
       // Display bot response
       displayMessage(data.bot_response, 'left', 'https://bootdey.com/img/Content/avatar/avatar1.png', 'Bot', 'online');
+      
+      // Scroll to the bottom of the chat
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    })
+    .catch(error => console.error('Error:', error));
+
+    function displayMessage(messageText, alignment, userImage, userName, userStatus) {
+      var chatBubble = document.createElement('div');
+      chatBubble.classList.add('answer', alignment);
+
+      var avatarDiv = document.createElement('div');
+      avatarDiv.classList.add('avatar');
+
+      var img = document.createElement('img');
+      img.src = userImage; // Use the provided user image URL
+      img.alt = userName;
+
+      var statusDiv = document.createElement('div');
+      statusDiv.classList.add('status', userStatus);
+
+      avatarDiv.appendChild(img);
+      avatarDiv.appendChild(statusDiv);
+
+      var nameDiv = document.createElement('div');
+      nameDiv.classList.add('name');
+      nameDiv.textContent = userName;
+
+      var textDiv = document.createElement('div');
+      textDiv.classList.add('text');
+      textDiv.textContent = messageText;
+
+      var timeDiv = document.createElement('div');
+      timeDiv.classList.add('time');
+      timeDiv.textContent = 'Just now';
+
+      chatBubble.appendChild(avatarDiv);
+      chatBubble.appendChild(nameDiv);
+      chatBubble.appendChild(textDiv);
+      chatBubble.appendChild(timeDiv);
+
+      chatBody.appendChild(chatBubble);
+    }
+
+  }
+  
+</script>
+
+<script>
+  function sendEmbedding() {
+    var userInput = document.getElementById('message-input').value;
+    var chatBody = document.querySelector('.chat-body');
+    var chatMessages = document.getElementById('chat-messages');
+
+    // Clear the input field
+    document.getElementById('message-input').value = '';
+
+    // Display user message
+    displayMessage(userInput, 'right', 'https://bootdey.com/img/Content/avatar/avatar2.png', 'User', 'online');
+
+    // Send user message to the server
+    fetch('/viber_webhook/receive', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: userInput, embedding: "embedding" }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Display bot response
+      displayMessage(data.embedding_response, 'left', 'https://bootdey.com/img/Content/avatar/avatar1.png', 'Bot', 'online');
       
       // Scroll to the bottom of the chat
       chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -270,8 +429,8 @@
     };
 
     audio.src = url;
-  });
-}
+    });
+  }
 
 
   async function audioMessage() {
